@@ -2,8 +2,8 @@ from flask import render_template, session, request, redirect, url_for, flash
 from shop import app, db, bcrypt
 from .forms import RegistrationForm, LoginForm
 from .models import User
-#from shop.products.models import Addproduct, Brand, Category
 import os
+
 
 @app.route("/admin")
 def admin():
@@ -11,23 +11,20 @@ def admin():
     if 'email' not in session:
         flash(f'please login first', 'danger')
         return redirect(url_for('login'))
-
-    #products = Addproduct.query.all()
     return render_template('admin/index.html', title='Admin page')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    '''the Registration page
+    '''the Registration route
        method:
-              the POST method will be used here
+              register: this implement the Registration of the page
     '''
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
-        with app.app_context():
-            hash_password = bcrypt.generate_password_hash(form.password.data)
-            user = User(name=form.name.data, username=form.username.data, email=form.email.data, password=hash_password)
-            db.session.add(user)
-            db.session.commit()
+        hash_password = bcrypt.generate_password_hash(form.password.data)
+        user = User(name=form.name.data, username=form.username.data, email=form.email.data, password=hash_password)
+        db.session.add(user)
+        db.session.commit()
         flash(f'Welcome {form.name.data} Thanks for registering', 'success')
         return redirect(url_for('login'))
     return render_template('admin/register.html', form=form, title="Registration page")
@@ -35,13 +32,19 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    '''the LoginForm
+        method:
+                login: this implement the login of the page
+
+     '''
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User.query.filter_by(email=form.email.data).first()
+        #user = db.one_or_404(db.select(User).filter_by(email=form.email.data))
+        user = User.query.filter_by(email=form.email.data).one_or_404()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             session['email'] = form.email.data
-            flash(f'congrats', 'success')
-            return redirect(request.args.get('next') or url_for('admin'))
+            flash(f' logged', 'success')
+            return redirect(request.args.get('next'))
         else:
-            flash(f'wrong password, please try again', 'danger')
+            flash(f'wrong email and  password combination', 'danger')
     return render_template('admin/login.html', form=form, title='Login page')
