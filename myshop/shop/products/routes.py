@@ -28,10 +28,14 @@ def addcat():
         db.session.commit()
         return redirect(url_for('addcat'))
 
-    return render_template('products/addbrand.html', categories='categories ')
+    return render_template('products/addbrand.html')
 
 
 @app.route('/addproduct', methods=['GET','POST'])
 def addproduct():
+    brands = Brand().query.all()
+    categories = Category.query.all()
     form = Addproducts(request.form)
-    return render_template('products/addproduct.html', title='Add PRODUCT page', form=form)
+
+    return render_template('products/addproduct.html', title='Add PRODUCT page', form=form,
+    brands= brands, categories=categories)
