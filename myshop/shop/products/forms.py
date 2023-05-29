@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm, RecaptchaField
 
 
 class Addproducts(FlaskForm):
-    """docstring for Addproducts."""
+    """this is the class for the product model"""
 
     name = StringField('Name', validators=[DataRequired()])
     price = IntegerField('Price', validators=[DataRequired()])
