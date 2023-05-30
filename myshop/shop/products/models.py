@@ -4,7 +4,9 @@ from datetime import datetime
 
 
 class Addproduct(db.Model):
-    """docstring for Addproduct."""
+    """The model for Addproduct
+       It defines fields for the the product to be added
+    """
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
