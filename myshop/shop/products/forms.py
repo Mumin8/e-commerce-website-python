@@ -1,7 +1,7 @@
 from flask_wtf.file import FileAllowed, FileField, FileRequired
 from wtforms import IntegerField, StringField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired
-from flask_wtf import FlaskForm, RecaptchaField
+from flask_wtf import FlaskForm
 
 
 class Addproducts(FlaskForm):
