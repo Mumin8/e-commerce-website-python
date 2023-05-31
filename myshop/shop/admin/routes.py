@@ -1,5 +1,6 @@
 from flask import render_template, session, request, redirect, url_for, flash
 from shop import app, db, bcrypt
+from shop.products.models import Addproduct
 from .forms import RegistrationForm, LoginForm
 from .models import User
 import os
@@ -11,7 +12,8 @@ def admin():
     if 'email' not in session:
         flash(f'please login first', 'danger')
         return redirect(url_for('login'))
-    return render_template('admin/index.html', title='Admin page')
+    products = Addproduct.query.all()
+    return render_template('admin/index.html', title='Admin page', products=products)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -44,7 +46,7 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             session['email'] = form.email.data
             flash(f' logged', 'success')
-            return redirect(request.args.get('next'))
+            return redirect(request.args.get('next') or url_for('admin'))
         else:
             flash(f'wrong email and  password combination', 'danger')
     return render_template('admin/login.html', form=form, title='Login page')
