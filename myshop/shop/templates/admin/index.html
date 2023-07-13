@@ -63,9 +63,9 @@
         <td>{{product.price}}</td>
         <td>{{product.discount}} %</td>
         <td>{{product.brand.name}}</td>
-        <td><img src="{{url_for("static", filename='images/'+product.image_1)}}" alt="" width="80" height="70"></td>
-        <td>Edit</td>
-        <td>Delete</td>
+        <td><img src="{{url_for("static", filename='images/'+product.image_1)}}" alt="" width="70" height="60"></td>
+        <td><a href="{{url_for('updateproduct', id=product.id)}}" class="btn btn-info btn-sm">Edit</a></td>
+        <td><a href="{{url_for('updateproduct', id=product.id)}}" class="btn btn-danger btn-sm">Delete</a></td>
       </tr>
       {% endfor %}
     </tbody>
