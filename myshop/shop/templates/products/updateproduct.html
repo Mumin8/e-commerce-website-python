@@ -35,12 +35,10 @@
 
       <div class="container">
         <div class="row">
-          <div class="col-md-4"><input type="text" name="image_1" class="form-control"></div>
-          <div class="col-md-4"><input type="text" name="image_2" class="form-control"></div>
-          <div class="col-md-4"><input type="text" name="image_3" class="form-control"></div>
-
+          <div class="col-md-4">{{render_field(form.image_1, class='form-control')}}</div>
+          <div class="col-md-4">{{render_field(form.image_2, class='form-control')}}</div>
+          <div class="col-md-4">{{render_field(form.image_3, class='form-control')}}</div>
         </div>
-
       </div>
 
       <button type="submit" class="btn btn-outline-info mt-2">Update Product</button>
