@@ -1,12 +1,19 @@
-from flask import redirect, render_template, url_for, flash, request, session
+from flask import redirect, render_template, url_for, flash,
+from flask import request, session, current_app
 from shop import db, app, photos
 from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 import secrets
+import os
 
 
+# the endpoint to the addbrand function
 @app.route('/addbrand', methods=['GET', 'POST'])
 def addbrand():
+    '''
+    addbrand:
+                this function adds a brand to the database
+    '''
     if 'email' not in session:
         flash(f'please login first', 'danger')
         return redirect(url_for('login'))
@@ -21,8 +28,15 @@ def addbrand():
     return render_template('products/addbrand.html', brands='brands')
 
 
+# the endpoint to the updatebrand function
 @app.route('/updatebrand/<int:id>', methods=['GET', 'POST'])
 def updatebrand(id):
+    '''
+    updatebrand:
+                this function updates a brands
+    args:
+            id: the id of the brand to be updateproduct
+    '''
     if 'email' not in session:
         flash(f'please login first', 'danger')
     updatebrand = Brand.query.get_or_404(id)
@@ -38,8 +52,13 @@ def updatebrand(id):
                             )
 
 
+# the endpoint to the addcat function
 @app.route('/addcategory', methods=['GET', 'POST'])
 def addcat():
+    '''
+    addcat:
+            this function adds a new category to the database
+    '''
     if 'email' not in session:
         flash(f'please login first', 'danger')
         return redirect(url_for('login'))
@@ -53,8 +72,15 @@ def addcat():
     return render_template('products/addbrand.html')
 
 
+# the endpoint to the updatecategory function
 @app.route('/updatecat/<int:id>', methods=['GET', 'POST'])
 def updatecat(id):
+    '''
+    updatecat:
+                the function to update the category of the products
+    args:
+            id: the id of the product to update
+    '''
     if 'email' not in session:
         flash(f'please login first', 'danger')
     updatecat = Category.query.get_or_404(id)
@@ -119,6 +145,8 @@ def addproduct():
 
         # add the data to session
         db.session.add(addprod)
+
+        # message to the admin
         flash(
             "the product {} has been added to the database".format(name),
             'success'
@@ -159,8 +187,61 @@ def updateproduct(id):
         product.category_id = category
         product.color = form.color.data
         product.desc = form.description.data
+        if request.files.get('image_1'):
+            try:
+                os.unlink(
+                            os.path.join(
+                                    current_app.root_path,
+                                    'static/images/' + product.image_1
+                                    )
+                        )
+                product.image_1 = photos.save(
+                                request.files.get('image_1'),
+                                name=secrets.token_hex(10)+'.'
+                                )
+            except Exception:
+                product.image_1 = photos.save(
+                                request.files.get('image_1'),
+                                name=secrets.token_hex(10)+'.'
+                                )
+        if request.files.get('image_2'):
+            try:
+                os.unlink(
+                            os.path.join(
+                                        current_app.root_path,
+                                        'static/images/' + product.image_2
+                                        )
+                        )
+                product.image_2 = photos.save(
+                                request.files.get('image_2'),
+                                name=secrets.token_hex(10)+'.'
+                                )
+            except Exception:
+                product.image_2 = photos.save(
+                                request.files.get('image_2'),
+                                name=secrets.token_hex(10)+'.'
+                                )
+        if request.files.get('image_3'):
+            try:
+                os.unlink(
+                            os.path.join(
+                                        current_app.root_path,
+                                        'static/images/' + product.image_3
+                                        )
+                        )
+                product.image_3 = photos.save(
+                                request.files.get('image_3'),
+                                name=secrets.token_hex(10)+'.'
+                                )
+            except Exception:
+                product.image_3 = photos.save(
+                                request.files.get('image_3'),
+                                name=secrets.token_hex(10)+'.'
+                                )
         db.session.commit()
-        flash(f'Your product was updated successfully')
+        flash(f'Your product was updated successfully', 'success')
+        return redirect(url_for('admin'))
+
     form.name.data = product.name
     form.price.data = product.price
     form.discount.data = product.discount
@@ -170,4 +251,4 @@ def updateproduct(id):
     return render_template(
                         'products/updateproduct.html', form=form,
                         brands=brands, categories=categories, product=product
-                        )
+                         )
