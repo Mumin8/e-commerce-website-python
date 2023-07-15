@@ -5,6 +5,40 @@ from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 import secrets
 import os
+import time
+
+
+# the endpoint to home function
+@app.route('/')
+def home():
+    '''
+    home:
+            the function to Home
+    '''
+    products = Addproduct.query.filter(Addproduct.stock > 0)
+    brands = Brand.query.join(
+                            Addproduct, (Brand.id == Addproduct.brand_id)
+                              ).all()
+    # brands = Brand.query.all()
+    return render_template(
+                        'products/index.html', products=products, brands=brands
+                        )
+
+# the endpoint to the get_brand function
+@app.route('/brand/<int:id>')
+def get_brand(id):
+    '''
+    get_brand:
+                the function to get all brands
+    args:
+        id:
+             the id of the brand required
+    '''
+    brand = Addproduct.query.filter_by(brand_id=id)
+    brands = Brand.query.join(
+                            Addproduct, (Brand.id == Addproduct.brand_id)
+                            ).all()
+    return render_template('products/index.html', brand=brand, brands=brands)
 
 
 # the endpoint to the addbrand function
@@ -313,6 +347,7 @@ def deleteproduct(id) -> 'admin':
                                         'static/images/' + product.image_3
                                         )
                         )
+                time.sleep(1)
             except Exception as e:
                 print(f'{e}')
 
