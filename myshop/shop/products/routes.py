@@ -9,7 +9,7 @@ import os
 
 # the endpoint to the addbrand function
 @app.route('/addbrand', methods=['GET', 'POST'])
-def addbrand():
+def addbrand() -> 'login or addbrand or render_template':
     '''
     addbrand:
                 this function adds a brand to the database
@@ -50,6 +50,18 @@ def updatebrand(id):
                             'products/updatebrand.html',
                             title='update brand page', updatebrand=updatebrand
                             )
+
+
+@app.route('/deletebrand/<int:id>', methods=['POST'])
+def deletebrand(id):
+    brand = Brand.query.get_or_404(id)
+    if request.method == 'POST':
+        db.session.delete(brand)
+        db.session.commit()
+        flash(f'the brand {brand.name} was has been deleted', 'success')
+        return redirect(url_for('admin'))
+    flash(f'The brand {brand.name} cant be deleted', 'warning')
+    return redirect(url_for('admin'))
 
 
 # the endpoint to the addcat function
@@ -94,6 +106,18 @@ def updatecat(id):
                         'products/updatebrand.html',
                         title='update category page', updatecat=updatecat
                         )
+
+
+@app.route('/deletecategory/<int:id>', methods=['POST'])
+def deletecategory(id):
+    category = Category.query.get_or_404(id)
+    if request.method == 'POST':
+        db.session.delete(category)
+        db.session.commit()
+        flash(f'the category {category.name} was has been deleted', 'success')
+        return redirect(url_for('admin'))
+    flash(f'The category {category.name} cant be deleted', 'warning')
+    return redirect(url_for('admin'))
 
 
 # The end point to addproduct function
@@ -148,7 +172,7 @@ def addproduct():
 
         # message to the admin
         flash(
-            "the product {} has been added to the database".format(name),
+            " {} has been added to the database".format(name),
             'success'
             )
 
@@ -169,9 +193,10 @@ def updateproduct(id):
     updateproduct:
                     this function updates a products
     '''
-    # query the database for brands, categories, product
+    # query the database for all brands and categories
     brands = Brand.query.all()
     categories = Category.query.all()
+    # query database for a product by an id
     product = Addproduct.query.get_or_404(id)
     brand = request.form.get('brand')
     category = request.form.get('category')
@@ -252,3 +277,48 @@ def updateproduct(id):
                         'products/updateproduct.html', form=form,
                         brands=brands, categories=categories, product=product
                          )
+
+
+# the endpoint to the deleteproduct function
+@app.route('/deleteproduct/<int:id>', methods=['POST'])
+def deleteproduct(id) -> 'admin':
+    '''
+    deleteproduct:
+                    the function that deletes a product from database
+    args:
+            id: the id of the product to be deleteproduct
+    '''
+    # get the product by its id
+    product = Addproduct.query.get_or_404(id)
+    if request.method == "POST":
+        if request.files.get('image_1'):
+            try:
+                os.unlink(
+                            os.path.join(
+                                    current_app.root_path,
+                                    'static/images/' + product.image_1
+                                    )
+                        )
+
+                os.unlink(
+                            os.path.join(
+                                        current_app.root_path,
+                                        'static/images/' + product.image_2
+                                        )
+                        )
+
+                os.unlink(
+                            os.path.join(
+                                        current_app.root_path,
+                                        'static/images/' + product.image_3
+                                        )
+                        )
+            except Exception as e:
+                print(f'{e}')
+
+        db.session.delete(product)
+        db.session.commit()
+        flash(f'The product {product.name} has been deleted', 'success')
+        return redirect(url_for('admin'))
+    flash(f'Could not delete product', 'danger')
+    return redirect(url_for('admin'))
