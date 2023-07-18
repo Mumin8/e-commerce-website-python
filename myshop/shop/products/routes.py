@@ -15,16 +15,24 @@ def home():
     home:
             the function to Home
     '''
-    products = Addproduct.query.filter(Addproduct.stock > 0)
+    page = request.args.get('page', 1, type=int)
+    products = Addproduct.query.filter(
+                                        Addproduct.stock > 0
+                                        ).order_by(
+                                        Addproduct.id.desc()
+                                        ).paginate(page=page, per_page=2)
     brands = Brand.query.join(
                             Addproduct, (Brand.id == Addproduct.brand_id)
                               ).all()
-    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+    categories = Category.query.join(
+                            Addproduct, (Category.id == Addproduct.category_id)
+                                    ).all()
     # brands = Brand.query.all()
     return render_template(
                         'products/index.html', products=products,
                         brands=brands, categories=categories
                         )
+
 
 # the endpoint to the get_brand function
 @app.route('/brand/<int:id>')
@@ -36,31 +44,46 @@ def get_brand(id):
         id:
              the id of the brand required
     '''
-    brand = Addproduct.query.filter_by(brand_id=id)
+    page = request.args.get('page', 1, type=int)
+    get_b = Brand.query.filter_by(id=id).first_or_404()
+    brand = Addproduct.query.filter_by(brand=get_b).paginate(
+                                        page=page, per_page=2
+                                        )
     brands = Brand.query.join(
                             Addproduct, (Brand.id == Addproduct.brand_id)
                             ).all()
     categories = Category.query.join(
                                     Addproduct, (
-                                    Category.id == Addproduct.category_id)
-                                    ).all()
+                                        Category.id == Addproduct.category_id
+                                                )).all()
 
-    return render_template('products/index.html', brand=brand, brands=brands, categories=categories)
-
+    return render_template(
+                        'products/index.html', brand=brand,
+                        brands=brands, categories=categories, get_b=get_b
+                        )
 
 
 @app.route('/categories/<int:id>')
 def get_category(id):
-    get_cat_prod = Addproduct.query.filter_by(category_id=id)
+    page = request.args.get('page', 1, type=int)
+    get_cat = Category.query.filter_by(id=id).first_or_404()
+    get_cat_prod = Addproduct.query.filter_by(category=get_cat).paginate(
+                                                        page=page, per_page=2
+                                                        )
     brands = Brand.query.join(
                             Addproduct, (Brand.id == Addproduct.brand_id)
                             ).all()
     categories = Category.query.join(
                                     Addproduct, (
-                                    Category.id == Addproduct.category_id)
+                                        Category.id == Addproduct.category_id)
+                                                ).all()
+    categories = Category.query.join(
+                        Addproduct, (Category.id == Addproduct.category_id)
                                     ).all()
-    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
-    return render_template('products/index.html', get_cat_prod=get_cat_prod, categories=categories, brands=brands)
+    return render_template(
+                        'products/index.html', get_cat_prod=get_cat_prod,
+                        categories=categories, brands=brands, get_cat=get_cat
+                        )
 
 
 # the endpoint to the addbrand function
@@ -169,6 +192,7 @@ def updatecat(id):
                         'products/updatebrand.html',
                         title='update category page', updatecat=updatecat
                         )
+
 
 # the endpoint to the deletecategory function
 @app.route('/deletecategory/<int:id>', methods=['POST'])
