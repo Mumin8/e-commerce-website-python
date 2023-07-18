@@ -19,9 +19,11 @@ def home():
     brands = Brand.query.join(
                             Addproduct, (Brand.id == Addproduct.brand_id)
                               ).all()
+    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
     # brands = Brand.query.all()
     return render_template(
-                        'products/index.html', products=products, brands=brands
+                        'products/index.html', products=products,
+                        brands=brands, categories=categories
                         )
 
 # the endpoint to the get_brand function
@@ -38,7 +40,27 @@ def get_brand(id):
     brands = Brand.query.join(
                             Addproduct, (Brand.id == Addproduct.brand_id)
                             ).all()
-    return render_template('products/index.html', brand=brand, brands=brands)
+    categories = Category.query.join(
+                                    Addproduct, (
+                                    Category.id == Addproduct.category_id)
+                                    ).all()
+
+    return render_template('products/index.html', brand=brand, brands=brands, categories=categories)
+
+
+
+@app.route('/categories/<int:id>')
+def get_category(id):
+    get_cat_prod = Addproduct.query.filter_by(category_id=id)
+    brands = Brand.query.join(
+                            Addproduct, (Brand.id == Addproduct.brand_id)
+                            ).all()
+    categories = Category.query.join(
+                                    Addproduct, (
+                                    Category.id == Addproduct.category_id)
+                                    ).all()
+    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+    return render_template('products/index.html', get_cat_prod=get_cat_prod, categories=categories, brands=brands)
 
 
 # the endpoint to the addbrand function
@@ -86,8 +108,15 @@ def updatebrand(id):
                             )
 
 
+# the endpoint to the deletebrand function
 @app.route('/deletebrand/<int:id>', methods=['POST'])
 def deletebrand(id):
+    '''
+    deletebrand:
+                the function to deletebrand
+    args:
+        id: the id of the brand to be delete
+    '''
     brand = Brand.query.get_or_404(id)
     if request.method == 'POST':
         db.session.delete(brand)
@@ -141,9 +170,16 @@ def updatecat(id):
                         title='update category page', updatecat=updatecat
                         )
 
-
+# the endpoint to the deletecategory function
 @app.route('/deletecategory/<int:id>', methods=['POST'])
 def deletecategory(id):
+    '''
+    deletecategory:
+                the function that deletes a category
+    args:
+        id:
+            the id of the category to be deleted
+    '''
     category = Category.query.get_or_404(id)
     if request.method == 'POST':
         db.session.delete(category)
@@ -226,6 +262,10 @@ def updateproduct(id):
     '''
     updateproduct:
                     this function updates a products
+
+    args:
+        id:
+            the id of the product to be updated
     '''
     # query the database for all brands and categories
     brands = Brand.query.all()
@@ -320,36 +360,37 @@ def deleteproduct(id) -> 'admin':
     deleteproduct:
                     the function that deletes a product from database
     args:
-            id: the id of the product to be deleteproduct
+            id:
+                the id of the product to be deleteproduct
     '''
     # get the product by its id
     product = Addproduct.query.get_or_404(id)
     if request.method == "POST":
-        if request.files.get('image_1'):
-            try:
-                os.unlink(
-                            os.path.join(
+        # if request.files.get('image_1'):
+        try:
+            os.unlink(
+                        os.path.join(
+                                current_app.root_path,
+                                'static/images/' + product.image_1
+                                )
+                    )
+
+            os.unlink(
+                        os.path.join(
                                     current_app.root_path,
-                                    'static/images/' + product.image_1
+                                    'static/images/' + product.image_2
                                     )
-                        )
+                    )
 
-                os.unlink(
-                            os.path.join(
-                                        current_app.root_path,
-                                        'static/images/' + product.image_2
-                                        )
-                        )
-
-                os.unlink(
-                            os.path.join(
-                                        current_app.root_path,
-                                        'static/images/' + product.image_3
-                                        )
-                        )
-                time.sleep(1)
-            except Exception as e:
-                print(f'{e}')
+            os.unlink(
+                        os.path.join(
+                                    current_app.root_path,
+                                    'static/images/' + product.image_3
+                                    )
+                    )
+            time.sleep(1)
+        except Exception as e:
+            print(f'{e}')
 
         db.session.delete(product)
         db.session.commit()
