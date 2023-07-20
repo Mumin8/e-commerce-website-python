@@ -30,3 +30,4 @@ bcrypt = Bcrypt(app)
 # import from routes from the packages
 from shop.admin import routes
 from shop.products import routes
+from shop.carts import carts
