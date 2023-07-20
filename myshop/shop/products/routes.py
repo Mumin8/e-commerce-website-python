@@ -34,6 +34,18 @@ def home():
                         )
 
 
+@app.route('/product/<int:id>')
+def single_page(id):
+    product = Addproduct.query.get_or_404(id)
+    brands = Brand.query.join(
+                            Addproduct, (Brand.id == Addproduct.brand_id)
+                              ).all()
+    categories = Category.query.join(
+                            Addproduct, (Category.id == Addproduct.category_id)
+                                    ).all()
+    return render_template('products/single_page.html', product=product, brands=brands, categories=categories)
+
+
 # the endpoint to the get_brand function
 @app.route('/brand/<int:id>')
 def get_brand(id):
