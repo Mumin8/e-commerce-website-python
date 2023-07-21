@@ -24,14 +24,15 @@ If the user provided the right registration data, the registration will be succe
 ![User Login](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/wrong_login.PNG)
 If the user's credentials are correct login will be allowed otherwise it will be disallowed
 
-### *Screenshot of the admin logged in with the correct credentials*
-![Admin Dashboard](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/admin_page.PNG)
-If the user is the admin, he will get to the admin page where he/she will be able to manage the products
 
 ## Value Proposition:
 
 ### Empowering Administrators:
 The admin view empowers administrators to efficiently manage the platform without the need for technical assistance. They can focus on curating an engaging shopping experience for customers, streamlining brand and category information with ease.
+
+### *Screenshot of the admin logged in with the correct credentials*
+![Admin Dashboard](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/admin_page.PNG)
+If the user is the admin, he will get to the admin page where he/she will be able to manage the products
 
 ### Seamless User Experience:
 A well-organized admin view translates to a well-structured shopping experience for the users. Customers can easily find products and navigate through various categories, enhancing their overall satisfaction.
@@ -39,4 +40,34 @@ A well-organized admin view translates to a well-structured shopping experience 
 ### Security First Approach:
 I prioritized security in this project. User passwords are securely encrypted, ensuring that sensitive information remains safe even in the event of a data breach.
 
-### 
+## Shopping Cart Functionality:
+The eCommerce web application provides a user-friendly shopping cart feature, allowing customers to add products to their cart and keep track of their selected items. Let's explore how it works:
+
+### Adding Products to Cart
+#### Add to Cart Button:
+On each product page, customers can find an "Add to Cart" button. When they click this button, it triggers the AddCart function
+
+#### Handling Cart Data:
+The AddCart function processes the data from the product page, such as the product ID, quantity, and selected color. It retrieves the product details from the database and constructs a dictionary with the relevant information
+
+#### Cart Session:
+To keep track of the cart items across multiple pages, we use a session called "Shoppingcart." If the session already exists, the new product information is added to it. If not, a new session is created with the product data
+
+### Viewing the Shopping Cart
+#### Cart Icon:
+We provide a cart icon in the navigation bar, allowing customers to view their shopping cart at any time.
+
+#### The getCart Function:
+The getCart function retrieves the cart data from the "Shoppingcart" session. It calculates the subtotal, applies any available discounts, calculates taxes, and determines the grand total.
+
+### Cart Information Display
+#### Cart Page:
+When customers navigate to the shopping cart page, they can see a summary of their selected products, including product names, prices, quantities, and colors.
+
+#### Subtotal, Discounts, and Taxes:
+The cart page displays the subtotal of all selected items, taking into account any available discounts. It also calculates the applicable taxes (6%) for the order.
+
+#### Grand Total:
+The cart page shows the final grand total, which includes the subtotal and taxes.
+
+With the shopping cart functionality, customers can easily add products to their cart and keep track of their selections throughout their shopping journey. The cart page provides a transparent view of the order details, making the checkout process smooth and enjoyable for our users.
