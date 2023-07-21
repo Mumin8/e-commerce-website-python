@@ -61,16 +61,18 @@ We provide a cart icon in the navigation bar, allowing customers to view their s
 The getCart function retrieves the cart data from the "Shoppingcart" session. It calculates the subtotal, applies any available discounts, calculates taxes, and determines the grand total.
 
 ### Cart Information Display
+#### Home page
+![Shop Home Page](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/home_page.PNG)
 #### Cart Page:
 When customers navigate to the shopping cart page, they can see a summary of their selected products, including product names, prices, quantities, and colors.
-![User Login](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/detailsAndCart.PNG)
+![User Cart items](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/detailsAndCart.PNG)
 
 #### Subtotal, Discounts, and Taxes:
 The cart page displays the subtotal of all selected items, taking into account any available discounts. It also calculates the applicable taxes (6%) for the order.
-![User Login](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/cart_details.PNG)
+![The details in Cart](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/cart_details.PNG)
 
 #### Grand Total:
 The cart page shows the final grand total, which includes the subtotal and taxes.
 
 With the shopping cart functionality, customers can easily add products to their cart and keep track of their selections throughout their shopping journey. The cart page provides a transparent view of the order details, making the checkout process smooth and enjoyable for the users.
-![User Login](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/detailsAndCart1.PNG)
+![Shopping Cart](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/detailsAndCart1.PNG)
