@@ -67,6 +67,7 @@ When customers navigate to the shopping cart page, they can see a summary of the
 
 #### Subtotal, Discounts, and Taxes:
 The cart page displays the subtotal of all selected items, taking into account any available discounts. It also calculates the applicable taxes (6%) for the order.
+![User Login](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/cart_details.PNG)
 
 #### Grand Total:
 The cart page shows the final grand total, which includes the subtotal and taxes.
