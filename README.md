@@ -18,12 +18,15 @@ The admin view includes secure user registration and login functionalities. New 
 
 ### *Screenshot of a new user registering.*
 ![User Register](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/register.PNG)
+If the user provided the right registration data, the registration will be successful
 
 ### *Screenshot of the user login with wrong credentials.*
 ![User Login](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/wrong_login.PNG)
+If the user's credentials are correct login will be allowed otherwise it will be disallowed
 
 ### *Screenshot of the admin logged in with the correct credentials*
 ![Admin Dashboard](https://github.com/Mumin8/e-commerce-website-python/blob/main/screenshots/admin_page.PNG)
+If the user is the admin, he will get to the admin page where he/she will be able to manage the products
 
 ## Value Proposition:
 
