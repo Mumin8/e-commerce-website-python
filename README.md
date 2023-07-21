@@ -15,7 +15,14 @@ The platform offers a diverse range of brands and product categories. With the b
 
 ### User Registration and Login:
 The admin view includes secure user registration and login functionalities. New users can sign up easily, and their passwords are encrypted for enhanced security. Returning users can log in with confidence, knowing their credentials are protected.
+![User Register](screenshots/register.png)
+*Screenshot of a new user registering.*
 
+![User Login](screenshots/wrong_login.png)
+*Screenshot of the user login with wrong credentials.*
+
+![Admin Dashboard](screenshots/admin_dashboard.png)
+*Screenshot of the admin logged in with the correct credentials*
 
 ## Value Proposition:
 
