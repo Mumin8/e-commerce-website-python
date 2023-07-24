@@ -7,7 +7,7 @@ class Addproduct(db.Model):
     """Defines a  model for Addproduct
        It defines fields for the the product to be added
     """
-
+    __searchable__=['name', 'desc']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
