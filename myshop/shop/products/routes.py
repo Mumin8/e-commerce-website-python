@@ -1,6 +1,6 @@
 from flask import redirect, render_template, url_for, flash
 from flask import request, session, current_app
-from shop import db, app, photos
+from shop import db, app, photos, search
 from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 import secrets
@@ -42,9 +42,16 @@ def home():
                         )
 
 
+@app.route('/result')
+def result():
+    searchword = request.args.get('q')
+    products = Addproduct.query.msearch(searchword, fields=['name', 'desc'], limit=3)
+    return render_template('products/result.html', products=products,
+    brands=brands(), categories=categories())
+
 @app.route('/product/<int:id>')
 def single_page(id):
-    product = Addproduct.query.get_or_404(id).all()
+    product = Addproduct.query.get_or_404(id)
     return render_template('products/single_page.html', product=product, brands=brands(), categories=categories())
 
 
