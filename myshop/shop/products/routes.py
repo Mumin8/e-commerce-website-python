@@ -8,6 +8,18 @@ import os
 import time
 
 
+def brands():
+    brands = Brand.query.join(
+                            Addproduct, (Brand.id == Addproduct.brand_id)
+                              ).all()
+    return brands
+
+def categories():
+    categories = Category.query.join(
+                            Addproduct, (Category.id == Addproduct.category_id)
+                                    ).all()
+    return categories
+
 # the endpoint to home function
 @app.route('/')
 def home():
@@ -20,30 +32,20 @@ def home():
                                         Addproduct.stock > 0
                                         ).order_by(
                                         Addproduct.id.desc()
-                                        ).paginate(page=page, per_page=2)
-    brands = Brand.query.join(
-                            Addproduct, (Brand.id == Addproduct.brand_id)
-                              ).all()
-    categories = Category.query.join(
-                            Addproduct, (Category.id == Addproduct.category_id)
-                                    ).all()
+                                        ).paginate(page=page, per_page=3)
+
+
     # brands = Brand.query.all()
     return render_template(
                         'products/index.html', products=products,
-                        brands=brands, categories=categories
+                        brands=brands(), categories=categories()
                         )
 
 
 @app.route('/product/<int:id>')
 def single_page(id):
-    product = Addproduct.query.get_or_404(id)
-    brands = Brand.query.join(
-                            Addproduct, (Brand.id == Addproduct.brand_id)
-                              ).all()
-    categories = Category.query.join(
-                            Addproduct, (Category.id == Addproduct.category_id)
-                                    ).all()
-    return render_template('products/single_page.html', product=product, brands=brands, categories=categories)
+    product = Addproduct.query.get_or_404(id).all()
+    return render_template('products/single_page.html', product=product, brands=brands(), categories=categories())
 
 
 # the endpoint to the get_brand function
@@ -61,17 +63,9 @@ def get_brand(id):
     brand = Addproduct.query.filter_by(brand=get_b).paginate(
                                         page=page, per_page=2
                                         )
-    brands = Brand.query.join(
-                            Addproduct, (Brand.id == Addproduct.brand_id)
-                            ).all()
-    categories = Category.query.join(
-                                    Addproduct, (
-                                        Category.id == Addproduct.category_id
-                                                )).all()
-
     return render_template(
                         'products/index.html', brand=brand,
-                        brands=brands, categories=categories, get_b=get_b
+                    brands=brands(), categories=categories(), get_b=get_b
                         )
 
 
@@ -82,19 +76,13 @@ def get_category(id):
     get_cat_prod = Addproduct.query.filter_by(category=get_cat).paginate(
                                                         page=page, per_page=2
                                                         )
-    brands = Brand.query.join(
-                            Addproduct, (Brand.id == Addproduct.brand_id)
-                            ).all()
-    categories = Category.query.join(
-                                    Addproduct, (
-                                        Category.id == Addproduct.category_id)
-                                                ).all()
+
     categories = Category.query.join(
                         Addproduct, (Category.id == Addproduct.category_id)
                                     ).all()
     return render_template(
                         'products/index.html', get_cat_prod=get_cat_prod,
-                        categories=categories, brands=brands, get_cat=get_cat
+                        categories=categories(), brands=brands(), get_cat=get_cat
                         )
 
 
