@@ -25,11 +25,11 @@ def AddCart():
         quantity = request.form.get('quantity')
         colors = request.form.get('colors')
         product = Addproduct.query.filter_by(id=product_id).first()
-        if product_id and quantity and colors and request.method == 'POST':
+        if request.method == 'POST':
             DictItems = {
                         product_id: {
                                 'name': product.name, 'price': product.price,
-                                'discount': product.discount, 'color': colors,
+                                 'discount': product.discount, 'color': colors,
                                 'quantity': quantity, 'image': product.image_1,
                                 'colors': product.color
                                     }
@@ -37,6 +37,10 @@ def AddCart():
             if 'Shoppingcart' in session:
                 # print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
+                    for key, item in session['Shoppingcart'].items():
+                        if int(key) == int(product_id):
+                            session.modified = True
+                            item['quantity'] += 1
                     print(f'{product.name} already in shopping cart ')
                 else:
                     session['Shoppingcart'] = MergerDicts(
@@ -111,3 +115,13 @@ def deleteitem(id):
     except Exception as e:
         print(e)
         return redirect(url_for('getCart'))
+
+
+@app.route('/clearcart')
+def clearcart():
+    try:
+        # session.clear() this will remove everything and log you out
+        session.pop('Shoppingcart', None)
+        return redirect(url_for('home'))
+    except Exception as e:
+        print(e)
