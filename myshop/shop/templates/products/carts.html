@@ -59,16 +59,20 @@
           <td> <a href="{{url_for('deleteitem', id=key)}}" class="btn btn-danger btn-sm">Remove</a></td>
         </tr>
         {% endfor %}
-        <hr>
-        <hr>
+      </tbody>
+    </table>
+    <table class="table table-sm">
         <tr>
           <td></td>
           <td><a href="/">Continue shopping</a></td>
           <td colspan="3">Tax: {{tax}}</td>
           <td colspan="4"> Grand Total: {{grandtotal}}</td>
+          <td><a href="{{url_for('clearcart')}}" class="btn btn-danger btn-sm
+            float-end me-4">
+          Clear Cart
+          </a></td>
         </tr>
-      </tbody>
-    </table>
+      </table>
 
   </div>
 
