@@ -1,0 +1,24 @@
+{%extends "base.html"%}
+
+{%block content%}
+<div class="h2 text-center btn btn-info">Login</div>
+
+<div class="">
+  {% from "_formhelpers.html" import render_field %}
+  <div class="row">
+    <div class="col-md-4"></div>
+  <div class="col-md-3">
+  {% include '_messages.html'%}
+<form method="post"">
+  {{ form.csrf_token }}
+  <div>
+    {{ render_field(form.email, class="form-control") }}
+    {{ render_field(form.password, class="form-control") }}
+  </div>
+  <p><input type=submit value=Login class="btn btn-info mt-2"></p>
+</form>
+</div>
+<div class="col-md-6"></div>
+</div>
+</div>
+{%endblock content %}
