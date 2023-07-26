@@ -1,8 +1,10 @@
-from wtforms import Form,SubmitField, TextAreaField, BooleanField, StringField, PasswordField, validators
+from wtforms import Form,SubmitField, TextAreaField, BooleanField, StringField, PasswordField, validators, ValidationError
 from flask_wtf.file import FileRequired, FileAllowed, FileField
 from wtforms.validators import DataRequired
+from flask_wtf import FlaskForm
+from .model import Register
 
-class  CustomerRegistrationForm(Form):
+class  CustomerRegistrationForm(FlaskForm):
     """docstring for  CustomerRegistrationForm."""
     name = StringField('Name: ')
     username = StringField('Username: ', [validators.DataRequired()])
@@ -13,7 +15,7 @@ class  CustomerRegistrationForm(Form):
 
     country = StringField('Country: ', [validators.DataRequired()])
     contact = StringField('Contact: ', [validators.DataRequired()])
-    state = StringField('State: ', [validators.DataRequired()])
+    # state = StringField('State: ', [validators.DataRequired()])
     city = StringField('City: ', [validators.DataRequired()])
     address = StringField('Address: ', [validators.DataRequired()])
     zipcode = StringField('Zipcode: ', [validators.DataRequired()])
@@ -22,3 +24,18 @@ class  CustomerRegistrationForm(Form):
     "Image only please")])
 
     submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        if Register.query.filter_by(username=username.data).first():
+             raise ValidationError("This username is already taken")
+
+    def validate_email(self, email):
+        if Register.query.filter_by(email=email.data).first():
+            raise ValidationError("This email is already taken")
+
+
+class customerLoginForm(FlaskForm):
+    """docstring for ."""
+
+    email = StringField('Email: ', [validators.Email(), validators.DataRequired()])
+    password = PasswordField('Password: ', [validators.DataRequired()])
