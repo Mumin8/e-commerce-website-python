@@ -64,7 +64,7 @@
     <table class="table table-sm">
         <tr>
           <td></td>
-          <td><a href="/">Continue shopping</a></td>
+          <td><a href="{{url_for('get_order')}}">Order now</a></td>
           <td colspan="3">Tax: {{tax}}</td>
           <td colspan="4"> Grand Total: {{grandtotal}}</td>
           <td><a href="{{url_for('clearcart')}}" class="btn btn-danger btn-sm
