@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block content%}
+
+ {% include 'navbar.html' %}
+<div class="container mt-4">
+  {% include '_messages.html'%}
+  <div class="row">
+
+<div class="mb-4">
+  invoice: {{orders.invoice}}
+  <br>
+  status: {{orders.status}}
+  <br>
+  Customer name: {{customer.name}}
+  <br>
+  Customer email: {{customer.email}}
+  <br>
+  Customer contact: {{customer.contact}}
+</div>
+
+    <table table table-sm>
+      <thead>
+        <th>Sr</th>
+
+        <th>Name</th>
+        <th>Color</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Discount</th>
+        <th>Subtotal</th>
+
+        <th>Remove</th>
+      </thead>
+      <tbody>
+        {% for key, product in orders.orders.items() %}
+        {% set discount = "%0.2f" |format((product.quantity|int * product.discount/100) * product.price|float) %}
+        <tr>
+          <td>{{loop.index}}</td>
+          <td>{{product.name}}</td>
+
+          <form class="" action="{{url_for('Updatecart', code=key)}}" method="post">
+
+            <td>
+              {{product.color|capitalize}}
+            </td>
+
+            <td>{{product.price}}</td>
+            <td>{{product.quantity}}</td>
+            {% if product.discount > 0 %}
+            <td>{{product.discount}}%  {{discount}}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% set subtotal = product.quantity|int * product.price|float %}
+            <td>{{"%0.2f"|format((subTotal|float) - discount|float)}}</td>
+
+
+          </form>
+
+
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <table class="table table-sm">
+        <tr>
+          <td></td>
+          <td><a href="#" class="btn btn-info float-start mt-4">Check out</a></td>
+          <!-- <td><a href="{{url_for('get_order')}}" class="btn btn-info float-start mt-4">Order now</a></td> -->
+          <td colspan="3">Tax: {{tax}}</td>
+          <td colspan="4"> Grand Total: {{grandTotal}}</td>
+          <td>
+            <a href="#" class="btn btn-danger float-end me-4 mt-4">Get PDF</a>
+            <!-- <a href="{{url_for('clearcart')}}" class="btn btn-danger float-end me-4 mt-4">Clear Cart</a> -->
+        </td>
+        </tr>
+
+      </table>
+
+  </div>
+
+</div>
+
+{% endblock content%}
