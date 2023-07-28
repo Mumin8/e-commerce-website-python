@@ -37,7 +37,7 @@ class JsonEncodedDict(db.TypeDecorator):
         else:
             return json.dumps(value)
 
-    def process_result_param(self, value, dialet):
+    def process_result_value(self, value, dialet):
         if value is None:
             return '{}'
         else:
@@ -47,7 +47,7 @@ class CustomerOrder(db.Model):
     """docstring for CustomerOrder."""
     id = db.Column(db.Integer, primary_key=True)
     invoice = db.Column(db.String(20), unique= True, nullable=False)
-    status = db.Column(db.String(20),default='pending', nullable=False)
+    status = db.Column(db.String(20), default='pending', nullable=False)
     customer_id = db.Column(db.Integer, unique= False, nullable=False)
     date_created = db.Column(db.DateTime, nullable= False, default=datetime.utcnow)
     orders = db.Column(JsonEncodedDict)
